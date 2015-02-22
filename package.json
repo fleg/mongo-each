@@ -1,0 +1,17 @@
+{
+  "name": "mongo-each",
+  "version": "0.0.1",
+  "description": "mongodb queued asynchronous each",
+  "main": "index.js",
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "each",
+    "async"
+  ],
+  "author": "fleg",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0"
+  }
+}
