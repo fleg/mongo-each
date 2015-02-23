@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-	"url": "https://github.com/fleg/mongo-each.git"
+    "url": "https://github.com/fleg/mongo-each.git"
   },
   "main": "index.js",
   "keywords": [
