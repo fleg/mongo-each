@@ -2,6 +2,12 @@
   "name": "mongo-each",
   "version": "0.0.1",
   "description": "mongodb queued asynchronous each",
+  "author": "fleg <flegmatik.bel@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+	"url": "https://github.com/fleg/mongo-each.git"
+  },
   "main": "index.js",
   "keywords": [
     "mongo",
@@ -9,8 +15,6 @@
     "each",
     "async"
   ],
-  "author": "fleg",
-  "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
     "extend": "^2.0.0"
