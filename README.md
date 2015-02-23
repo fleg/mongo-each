@@ -6,7 +6,8 @@ mongodb queued asynchronous each
 
 ```JavaScript
 var MongoClient = require("mongodb").MongoClient,
-	each = require("mongo-each");
+	each = require("mongo-each")
+	;
 	
 MongoClient.connect("mongodb://127.0.0.1:27017/data", function(err, db) {
 	if(err) throw err;
