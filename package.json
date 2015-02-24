@@ -10,7 +10,7 @@
   },
   "main": "index.js",
   "scripts": {
-     "test": "mocha test"
+    "test": "mocha test"
   },
   "keywords": [
     "mongo",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "mocha": "^2.1.0",
+    "mongodb": "^1.4.31",
     "should": "^5.0.1"
   }
 }
