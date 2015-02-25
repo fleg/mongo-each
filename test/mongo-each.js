@@ -109,7 +109,9 @@ describe("Iterate over cursor", function() {
 	describe("Batch iterate over cursor", function() {
 	
 		it("batchSize is multiple of cursor count", function(done) {
-			var cursor = collection.find();
+			var cursor = collection.find(),
+				batchSize = 10
+				;
 			
 			cursor.count(function(err, expectedCount) {
 				should.not.exist(err);
@@ -118,22 +120,24 @@ describe("Iterate over cursor", function() {
 				each(cursor, function(docs, cb) {
 					docs.should.be.an.Array;
 				
-					count += cursor.length;
+					count += docs.length;
 					process.nextTick(cb);
 				}, {
 					concurrency: 1000,
 					batch: true,
-					batchSize: 10
+					batchSize: batchSize
 				}, function(err) {
 					should.not.exist(err);
-					count.should.be.equal.expectedCount;
+					count.should.be.equal(expectedCount);
 					done();
 				});
 			});	
 		});
 		
 		it("batchSize isn't multiple of cursor count", function(done) {
-			var cursor = collection.find();
+			var cursor = collection.find(),
+				batchSize = 17
+				;
 			
 			cursor.count(function(err, expectedCount) {
 				should.not.exist(err);
@@ -141,16 +145,16 @@ describe("Iterate over cursor", function() {
 				var count = 0;
 				each(cursor, function(docs, cb) {
 					docs.should.be.an.Array;
-				
-					count += cursor.length;
+					
+					count += docs.length;
 					process.nextTick(cb);
 				}, {
 					concurrency: 1000,
 					batch: true,
-					batchSize: 13
+					batchSize: batchSize
 				}, function(err) {
 					should.not.exist(err);
-					count.should.be.equal.expectedCount;
+					count.should.be.equal(expectedCount);
 					done();
 				});
 			});	
