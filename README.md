@@ -41,10 +41,12 @@ MongoClient.connect("mongodb://127.0.0.1:27017/data", function(err, db) {
 ```
 
 ## Tests
-
+Run:
 ```sh
 npm test
 ```
+
+Pass mongodb connection string through `MONGODB_URI` variable or use default value `mongodb://127.0.0.1:27017/each_test`
 
 ## License
 

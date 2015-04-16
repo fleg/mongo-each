@@ -10,7 +10,7 @@ var db, collection,
 describe("Connect to mongodb and populate collection", function() {
 	
 	it("Connect to mongodb", function(done) {
-		MongoClient.connect("mongodb://127.0.0.1:27017/each_test", function(err, connection) {
+		MongoClient.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/each_test", function(err, connection) {
 			should.not.exist(err);
 			db = connection;
 			collection = db.collection("test");
