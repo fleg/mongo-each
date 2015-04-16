@@ -58,13 +58,13 @@ describe("Iterate over cursor", function() {
 	
 	it("Iterate over each document in cursor", function(done) {
 		var count = 0;
-		each(cursor, function(doc, cb) {
+		each(cursor, {
+			concurrency: 1000,
+		}, function(doc, cb) {
 			doc.should.be.ok;
 			
 			++count;
 			process.nextTick(cb);
-		}, {
-			concurrency: 1000,
 		}, function(err) {
 			should.not.exist(err);
 			count.should.be.equal.expectedCount;
@@ -107,15 +107,15 @@ describe("Iterate over cursor", function() {
 				count = 0
 				;
 				
-			each(cursor, function(docs, cb) {
+			each(cursor, {
+				concurrency: 1000,
+				batch: true,
+				batchSize: batchSize
+			}, function(docs, cb) {
 				docs.should.be.an.instanceOf(Array).and.have.lengthOf(batchSize);
 			
 				count += docs.length;
 				process.nextTick(cb);
-			}, {
-				concurrency: 1000,
-				batch: true,
-				batchSize: batchSize
 			}, function(err) {
 				should.not.exist(err);
 				count.should.be.equal(expectedCount);
@@ -128,15 +128,15 @@ describe("Iterate over cursor", function() {
 				count = 0
 				;
 			
-			each(cursor, function(docs, cb) {
+			each(cursor, {
+				concurrency: 1000,
+				batch: true,
+				batchSize: batchSize
+			}, function(docs, cb) {
 				docs.should.be.an.instanceOf(Array);
 
 				count += docs.length;
 				process.nextTick(cb);
-			}, {
-				concurrency: 1000,
-				batch: true,
-				batchSize: batchSize
 			}, function(err) {
 				should.not.exist(err);
 				count.should.be.equal(expectedCount);

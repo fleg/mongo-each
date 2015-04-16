@@ -3,7 +3,7 @@ Queued asynchronous iterating over mongodb cursor
 
 ## API
 
-### `each(cursor, iterator, [options], callback)`
+### `each(cursor, [options], iterator, callback)`
 * `cursor` - a mongodb cursor
 * `iterator` - `function(doc, cb)` - iterator function
 * `options` - optional
