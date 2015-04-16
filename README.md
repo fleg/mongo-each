@@ -1,5 +1,5 @@
 # mongo-each
-mongodb queued asynchronous each
+Queued asynchronous iterating over mongodb cursor
 
 ## API
 
@@ -10,7 +10,6 @@ mongodb queued asynchronous each
 	* `concurrency` - how many `iterator` functions should be run in parallel (default: `100`)
 	* `batch` - batch mode (default: `false`)
 	* `batchSize` - batch size (default: `10`)
-	* `rewind` - rewind cursor, before iterating (default: `true`)
 * `callback` - `function(err)` callback which is called when all iterator functions have finished, or an error occurs
 
 
