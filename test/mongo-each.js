@@ -125,8 +125,7 @@ describe("Iterate over cursor", function() {
 		
 		it("batchSize isn't multiple of cursor count", function(done) {
 			var batchSize = 17,
-				count = 0,
-				last = false
+				count = 0
 				;
 			
 			each(cursor, function(docs, cb) {
