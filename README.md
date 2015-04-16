@@ -26,13 +26,13 @@ MongoClient.connect("mongodb://127.0.0.1:27017/data", function(err, db) {
 	var collection = db.collection("data"),
 		cursor = collection.find();
 	
-	each(cursor, function(doc, cb) {
+	each(cursor, {
+		concurrency: 1000
+	}, function(doc, cb) {
 		process.nextTick(function() {
 			console.log(doc);
 			cb();
 		});
-	}, {
-		concurrency: 1000
 	}, function(err) {
 		console.log("err: ", err);
 		console.log("completed");
