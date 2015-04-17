@@ -1,5 +1,7 @@
 # mongo-each
 Queued asynchronous iterating over mongodb cursor
+  
+  [![NPM Version][npm-image]][npm-url]
 
 ## API
 
@@ -51,3 +53,6 @@ Pass mongodb connection string through `MONGODB_URI` variable or use default val
 ## License
 
 MIT
+
+[npm-image]: https://img.shields.io/npm/v/mongo-each.svg
+[npm-url]: https://www.npmjs.com/package/mongo-each
