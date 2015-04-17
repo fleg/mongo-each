@@ -1,8 +1,8 @@
 {
   "name": "mongo-each",
   "version": "0.0.1",
-  "description": "mongodb queued asynchronous each",
-  "author": "fleg <flegmatik.bel@gmail.com>",
+  "description": "Queued asynchronous iterating over mongodb cursor",
+  "author": "Aleksey Timchenko <flegmatik.bel@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "mocha": "^2.1.0",
-    "mongodb": "^1.4.31",
+    "mongodb": "^2.0.27",
     "should": "^5.0.1"
   }
 }

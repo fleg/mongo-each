@@ -4,7 +4,8 @@
 	;
 
 var db, collection,
-	cursor, expectedCount
+	cursor, expectedCount,
+	populateCount = 10000
 	;
 	
 describe("Connect to mongodb and populate collection", function() {
@@ -26,15 +27,14 @@ describe("Connect to mongodb and populate collection", function() {
 	});
 	
 	it("Populate collection", function(done) {
-		var docs = [ ],
-			count = 10000
+		var batch = collection.initializeUnorderedBulkOp()
 			;
-			
-		for(var i = 0; i < count; ++i) {
-			docs.push({data: i});
+		
+		for(var i = 0; i < populateCount; ++i) {
+			batch.insert({data: i});
 		}
 	
-		collection.insert(docs, { safe: true }, function(err) {
+		batch.execute(function(err) {
 			should.not.exist(err);
 			done();
 		});
@@ -64,7 +64,7 @@ describe("Iterate over cursor", function() {
 			doc.should.be.ok;
 			
 			++count;
-			process.nextTick(cb);
+			cb();
 		}, function(err) {
 			should.not.exist(err);
 			count.should.be.equal.expectedCount;
@@ -78,7 +78,7 @@ describe("Iterate over cursor", function() {
 			doc.should.be.ok;
 			
 			++count;
-			process.nextTick(cb);
+			cb();
 		}, function(err) {
 			should.not.exist(err);
 			count.should.be.equal.expectedCount;
@@ -91,9 +91,7 @@ describe("Iterate over cursor", function() {
 		var error = "i'm an error";
 		
 		each(cursor, function(doc, cb) {
-			process.nextTick(function() {
-				cb(error);
-			});
+			cb(error);
 		}, function(err) {
 			err.should.be.equal(error);
 			done();
@@ -115,7 +113,7 @@ describe("Iterate over cursor", function() {
 				docs.should.be.an.instanceOf(Array).and.have.lengthOf(batchSize);
 			
 				count += docs.length;
-				process.nextTick(cb);
+				cb();
 			}, function(err) {
 				should.not.exist(err);
 				count.should.be.equal(expectedCount);
@@ -136,7 +134,7 @@ describe("Iterate over cursor", function() {
 				docs.should.be.an.instanceOf(Array);
 
 				count += docs.length;
-				process.nextTick(cb);
+				cb();
 			}, function(err) {
 				should.not.exist(err);
 				count.should.be.equal(expectedCount);
