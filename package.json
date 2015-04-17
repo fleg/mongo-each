@@ -1,6 +1,6 @@
 {
   "name": "mongo-each",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Queued asynchronous iterating over mongodb cursor",
   "author": "Aleksey Timchenko <flegmatik.bel@gmail.com>",
   "license": "MIT",
