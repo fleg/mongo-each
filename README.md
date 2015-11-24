@@ -1,7 +1,7 @@
 # mongo-each
+[![NPM Version][npm-image]][npm-url]
+
 Queued asynchronous iterating over mongodb cursor
-  
-  [![NPM Version][npm-image]][npm-url]
 
 ## API
 
