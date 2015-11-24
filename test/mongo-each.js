@@ -1,148 +1,115 @@
-﻿var should = require("should"),
-	MongoClient = require("mongodb").MongoClient,
-	each = require("../lib/mongo-each.js")
-	;
+﻿var expect = require('expect.js'),
+	MongoClient = require('mongodb').MongoClient,
+	Steppy = require('twostep').Steppy,
+	each = require('../lib/mongo-each.js');
 
-var db, collection,
-	cursor, expectedCount,
-	populateCount = 10000
-	;
-	
-describe("Connect to mongodb and populate collection", function() {
-	
-	it("Connect to mongodb", function(done) {
-		MongoClient.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/each_test", function(err, connection) {
-			should.not.exist(err);
-			db = connection;
-			collection = db.collection("test");
-			done();
-		});
-	});
-	
-	it("Drop collection", function(done) {
-		collection.remove(function(err) {
-			should.not.exist(err);
-			done();
-		})
-	});
-	
-	it("Populate collection", function(done) {
-		var batch = collection.initializeUnorderedBulkOp()
-			;
-		
-		for(var i = 0; i < populateCount; ++i) {
-			batch.insert({data: i});
-		}
-	
-		batch.execute(function(err) {
-			should.not.exist(err);
-			done();
-		});
-		
-	});
-	
-});
+describe('mongo-each test', function() {
+	var db, collection, cursor, count,
+		expectedCount = 2000;
 
-describe("Iterate over cursor", function() {
-	
-	beforeEach(function(done) {
+	before(function(done) {
+		Steppy(
+			function() {
+				MongoClient.connect(
+					process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/each_test',
+					this.slot()
+				);
+			},
+			function(err, _db) {
+				db = _db;
+				collection = db.collection('test');
+
+				collection.remove(this.slot());
+			},
+			function(err) {
+				var batch = collection.initializeUnorderedBulkOp();
+
+				for (var i = 0; i < expectedCount; ++i) {
+					batch.insert({data: i});
+				}
+
+				batch.execute(this.slot());
+			},
+			done
+		);
+	});
+
+	beforeEach(function() {
 		cursor = collection.find();
-		
-		cursor.count(function(err, count) {
-			if(err) { return done(err); }
-			
-			expectedCount = count;
+		count = 0;
+	});
+
+	it('iterate over each document in cursor', function(done) {
+		each(cursor, {
+			concurrency: 50,
+			batch: false
+		}, function(doc, callback) {
+			expect(doc).to.be.ok();
+			++count;
+			callback();
+		}, function(err) {
+			expect(count).to.be.eql(expectedCount);
+			done(err);
+		});
+	});
+
+	it('iterate over each document in cursor, with defaults options', function(done) {
+		each(cursor, function(doc, callback) {
+			expect(doc).to.be.ok();
+			++count;
+			callback();
+		}, function(err) {
+			expect(count).to.be.eql(expectedCount);
+			done(err);
+		});
+	});
+
+	it('pass error from iterator to main callback', function(done) {
+		var error = 'i am an error';
+
+		each(cursor, function(doc, callback) {
+			callback(error);
+		}, function(err) {
+			expect(err).to.be.eql(error);
 			done();
 		});
 	});
-	
-	it("Iterate over each document in cursor", function(done) {
-		var count = 0;
+
+
+	it('batch iterate when batchSize is multiple of cursor count', function(done) {
+		var batchSize = 10;
+
 		each(cursor, {
 			concurrency: 1000,
-		}, function(doc, cb) {
-			doc.should.be.ok;
-			
-			++count;
-			cb();
+			batch: true,
+			batchSize: batchSize
+		}, function(docs, callback) {
+			expect(docs).to.be.an('array');
+			expect(docs.length).to.be.eql(batchSize);
+			count += docs.length;
+			callback();
 		}, function(err) {
-			should.not.exist(err);
-			count.should.be.equal.expectedCount;
-			done();
+			expect(count).to.be.eql(expectedCount);
+			done(err);
 		});
-	});
-	
-	it("Iterate over each document in cursor, with defaults options", function(done) {
-		var count = 0;
-		each(cursor, function(doc, cb) {
-			doc.should.be.ok;
-			
-			++count;
-			cb();
-		}, function(err) {
-			should.not.exist(err);
-			count.should.be.equal.expectedCount;
-			done();
-		});	
-	});
-	
-	it("Pass error from iterator to main callback", function(done) {
-		var cursor = collection.find();
-		var error = "i'm an error";
-		
-		each(cursor, function(doc, cb) {
-			cb(error);
-		}, function(err) {
-			err.should.be.equal(error);
-			done();
-		});	
 	});
 
-	describe("Batch iterate over cursor", function() {
-	
-		it("batchSize is multiple of cursor count", function(done) {
-			var batchSize = 10,
-				count = 0
-				;
-				
-			each(cursor, {
-				concurrency: 1000,
-				batch: true,
-				batchSize: batchSize
-			}, function(docs, cb) {
-				docs.should.be.an.instanceOf(Array).and.have.lengthOf(batchSize);
-			
-				count += docs.length;
-				cb();
-			}, function(err) {
-				should.not.exist(err);
-				count.should.be.equal(expectedCount);
-				done();
-			});	
-		});
-		
-		it("batchSize isn't multiple of cursor count", function(done) {
-			var batchSize = 17,
-				count = 0
-				;
-			
-			each(cursor, {
-				concurrency: 1000,
-				batch: true,
-				batchSize: batchSize
-			}, function(docs, cb) {
-				docs.should.be.an.instanceOf(Array);
+	it('batch iterate batchSize is not multiple of cursor count', function(done) {
+		var batchSize = 17;
 
-				count += docs.length;
-				cb();
-			}, function(err) {
-				should.not.exist(err);
-				count.should.be.equal(expectedCount);
-				done();
-			});	
+		each(cursor, {
+			concurrency: 1000,
+			batch: true,
+			batchSize: batchSize
+		}, function(docs, callback) {
+			expect(docs).to.be.an('array');
+			expect(docs.length).to.be.above(0);
+			expect(docs.length).to.be.below(batchSize + 1);
+			count += docs.length;
+			callback();
+		}, function(err) {
+			expect(count).to.be.eql(expectedCount);
+			done(err);
 		});
-	
 	});
-	
 });
-

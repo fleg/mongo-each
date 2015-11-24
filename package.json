@@ -10,7 +10,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test --bail --reporter spec --timeout 10000"
   },
   "keywords": [
     "mongo",
@@ -19,12 +19,13 @@
     "async"
   ],
   "dependencies": {
-    "async": "^0.9.0",
-    "extend": "^2.0.0"
+    "async": "0.9.0",
+    "extend": "2.0.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "mongodb": "^2.0.27",
-    "should": "^5.0.1"
+    "expect.js": "0.3.1",
+    "mocha": "2.1.0",
+    "mongodb": "2.0.49",
+    "twostep": "0.4.1"
   }
 }
