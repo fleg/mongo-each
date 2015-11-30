@@ -1,5 +1,6 @@
 # mongo-each
 [![Build Status](https://travis-ci.org/fleg/mongo-each.svg?branch=master)](https://travis-ci.org/fleg/mongo-each)
+[![Coverage Status](https://coveralls.io/repos/fleg/mongo-each/badge.svg?branch=master&service=github)](https://coveralls.io/github/fleg/mongo-each?branch=master)
 [![NPM Version][npm-image]][npm-url]
 
 Queued asynchronous iterating over mongodb cursor
