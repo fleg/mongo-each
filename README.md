@@ -1,4 +1,5 @@
 # mongo-each
+[![Build Status](https://travis-ci.org/fleg/mongo-each.svg?branch=master)](https://travis-ci.org/fleg/mongo-each)
 [![NPM Version][npm-image]][npm-url]
 
 Queued asynchronous iterating over mongodb cursor
