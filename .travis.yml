@@ -8,3 +8,9 @@ node_js:
 
 services:
   - mongodb
+
+script:
+  - npm run test-travis
+
+after_script:
+  - cat ./coverage/lcov.info | coveralls
