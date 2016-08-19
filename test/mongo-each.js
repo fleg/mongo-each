@@ -119,13 +119,15 @@ describe('mongo-each test', function() {
 	});
 
 	it('iterate over each document without dups', function(done) {
-		var hash = {},
+		var count = 0,
+			hash = {},
 			first = true;
 
 		each(collection.find({data: {$gte: 0}}), function(doc, callback) {
 			expect(doc).to.be.ok();
 			expect(hash).not.have.property(doc._id.toString());
 			hash[doc._id.toString()] = true;
+			++count;
 			if (first) {
 				first = false;
 				collection.updateOne({_id: doc._id}, {$set: {data: 5000}}, callback);
@@ -135,6 +137,9 @@ describe('mongo-each test', function() {
 		}, {
 			concurrency: 10,
 			batch: false
-		}, done);
+		}, function(err) {
+			expect(count).to.be.eql(expectedCount);
+			done(err);
+		});
 	});
 });
