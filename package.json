@@ -11,7 +11,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test --bail --reporter spec --timeout 10000",
-    "test-travis": "istanbul cover _mocha -- --reporter spec --timeout 10000"
+    "coverage": "istanbul cover _mocha -- --reporter spec --timeout 10000"
   },
   "keywords": [
     "mongo",

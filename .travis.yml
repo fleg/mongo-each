@@ -1,16 +1,25 @@
 language: node_js
 
 node_js:
-  - 0.10
-  - 0.12
-  - 4.2
-  - 5.1
+  - 4.4
+  - stable
 
-services:
-  - mongodb
+sudo: false
+
+env:
+  - MONGODB_VERSION=2.6.12
+  - MONGODB_VERSION=3.2.4
+
+before_script:
+  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB_VERSION}.tgz -O /tmp/mongodb.tgz
+  - tar -xvf /tmp/mongodb.tgz
+  - mkdir /tmp/data
+  - ${PWD}/mongodb-linux-x86_64-${MONGODB_VERSION}/bin/mongod --dbpath /tmp/data &> /dev/null &
+  - ${PWD}/mongodb-linux-x86_64-${MONGODB_VERSION}/bin/mongod --version
+  - until nc -z localhost 27017; do echo Waiting for MongoDB; sleep 1; done
 
 script:
-  - npm run test-travis
+  - npm run coverage
 
 after_script:
   - cat ./coverage/lcov.info | coveralls
