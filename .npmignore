@@ -1,0 +1,7 @@
+coverage
+test
+.travis.yml
+.gitignore
+.npmignore
+*.tgz
+*.log
