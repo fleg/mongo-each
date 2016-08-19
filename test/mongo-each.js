@@ -1,27 +1,29 @@
-﻿var expect = require('expect.js'),
+﻿'use strict';
+
+var expect = require('expect.js'),
 	MongoClient = require('mongodb').MongoClient,
 	Steppy = require('twostep').Steppy,
 	each = require('../lib/mongo-each.js');
 
 describe('mongo-each test', function() {
-	var db, collection, cursor, count,
+	var db, collection,
 		expectedCount = 2000;
 
 	before(function(done) {
 		Steppy(
 			function() {
 				MongoClient.connect(
-					process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/each_test',
+					'mongodb://127.0.0.1:27017/mongo_each_test',
 					this.slot()
 				);
 			},
 			function(err, _db) {
 				db = _db;
+				db.dropDatabase(this.slot());
+			},
+			function() {
 				collection = db.collection('test');
 
-				collection.remove(this.slot());
-			},
-			function(err) {
 				var batch = collection.initializeUnorderedBulkOp();
 
 				for (var i = 0; i < expectedCount; ++i) {
@@ -29,18 +31,17 @@ describe('mongo-each test', function() {
 				}
 
 				batch.execute(this.slot());
+				collection.createIndex({data: 1}, this.slot());
 			},
 			done
 		);
 	});
 
-	beforeEach(function() {
-		cursor = collection.find();
-		count = 0;
-	});
 
-	it('iterate over each document in cursor', function(done) {
-		each(cursor, {
+	it('iterate over each document', function(done) {
+		var count = 0;
+
+		each(collection.find(), {
 			concurrency: 50,
 			batch: false
 		}, function(doc, callback) {
@@ -53,8 +54,10 @@ describe('mongo-each test', function() {
 		});
 	});
 
-	it('iterate over each document in cursor, with defaults options', function(done) {
-		each(cursor, function(doc, callback) {
+	it('iterate over each document with defaults options', function(done) {
+		var count = 0;
+
+		each(collection.find(), function(doc, callback) {
 			expect(doc).to.be.ok();
 			++count;
 			callback();
@@ -67,7 +70,7 @@ describe('mongo-each test', function() {
 	it('pass error from iterator to main callback', function(done) {
 		var error = 'i am an error';
 
-		each(cursor, function(doc, callback) {
+		each(collection.find(), function(doc, callback) {
 			callback(error);
 		}, function(err) {
 			expect(err).to.be.eql(error);
@@ -77,9 +80,10 @@ describe('mongo-each test', function() {
 
 
 	it('batch iterate when batchSize is multiple of cursor count', function(done) {
-		var batchSize = 10;
+		var count = 0,
+			batchSize = 10;
 
-		each(cursor, {
+		each(collection.find(), {
 			concurrency: 1000,
 			batch: true,
 			batchSize: batchSize
@@ -95,9 +99,10 @@ describe('mongo-each test', function() {
 	});
 
 	it('batch iterate batchSize is not multiple of cursor count', function(done) {
-		var batchSize = 17;
+		var count = 0,
+			batchSize = 17;
 
-		each(cursor, {
+		each(collection.find(), {
 			concurrency: 1000,
 			batch: true,
 			batchSize: batchSize
@@ -111,5 +116,25 @@ describe('mongo-each test', function() {
 			expect(count).to.be.eql(expectedCount);
 			done(err);
 		});
+	});
+
+	it('iterate over each document without dups', function(done) {
+		var hash = {},
+			first = true;
+
+		each(collection.find({data: {$gte: 0}}), {
+			concurrency: 10,
+			batch: false
+		}, function(doc, callback) {
+			expect(doc).to.be.ok();
+			expect(hash).not.have.property(doc._id.toString());
+			hash[doc._id.toString()] = true;
+			if (first) {
+				first = false;
+				collection.updateOne({_id: doc._id}, {$set: {data: 5000}}, callback);
+			} else {
+				callback();
+			}
+		}, done);
 	});
 });
