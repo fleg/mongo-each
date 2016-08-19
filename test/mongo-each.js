@@ -41,13 +41,13 @@ describe('mongo-each test', function() {
 	it('iterate over each document', function(done) {
 		var count = 0;
 
-		each(collection.find(), {
-			concurrency: 50,
-			batch: false
-		}, function(doc, callback) {
+		each(collection.find(), function(doc, callback) {
 			expect(doc).to.be.ok();
 			++count;
 			callback();
+		}, {
+			concurrency: 50,
+			batch: false
 		}, function(err) {
 			expect(count).to.be.eql(expectedCount);
 			done(err);
@@ -83,15 +83,15 @@ describe('mongo-each test', function() {
 		var count = 0,
 			batchSize = 10;
 
-		each(collection.find(), {
-			concurrency: 1000,
-			batch: true,
-			batchSize: batchSize
-		}, function(docs, callback) {
+		each(collection.find(), function(docs, callback) {
 			expect(docs).to.be.an('array');
 			expect(docs.length).to.be.eql(batchSize);
 			count += docs.length;
 			callback();
+		}, {
+			concurrency: 1000,
+			batch: true,
+			batchSize: batchSize
 		}, function(err) {
 			expect(count).to.be.eql(expectedCount);
 			done(err);
@@ -102,16 +102,16 @@ describe('mongo-each test', function() {
 		var count = 0,
 			batchSize = 17;
 
-		each(collection.find(), {
-			concurrency: 1000,
-			batch: true,
-			batchSize: batchSize
-		}, function(docs, callback) {
+		each(collection.find(), function(docs, callback) {
 			expect(docs).to.be.an('array');
 			expect(docs.length).to.be.above(0);
 			expect(docs.length).to.be.below(batchSize + 1);
 			count += docs.length;
 			callback();
+		}, {
+			concurrency: 1000,
+			batch: true,
+			batchSize: batchSize
 		}, function(err) {
 			expect(count).to.be.eql(expectedCount);
 			done(err);
@@ -122,10 +122,7 @@ describe('mongo-each test', function() {
 		var hash = {},
 			first = true;
 
-		each(collection.find({data: {$gte: 0}}), {
-			concurrency: 10,
-			batch: false
-		}, function(doc, callback) {
+		each(collection.find({data: {$gte: 0}}), function(doc, callback) {
 			expect(doc).to.be.ok();
 			expect(hash).not.have.property(doc._id.toString());
 			hash[doc._id.toString()] = true;
@@ -135,6 +132,9 @@ describe('mongo-each test', function() {
 			} else {
 				callback();
 			}
+		}, {
+			concurrency: 10,
+			batch: false
 		}, done);
 	});
 });
