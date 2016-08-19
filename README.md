@@ -1,9 +1,9 @@
 # mongo-each
 [![Build Status](https://travis-ci.org/fleg/mongo-each.svg?branch=master)](https://travis-ci.org/fleg/mongo-each)
 [![Coverage Status](https://coveralls.io/repos/fleg/mongo-each/badge.svg?branch=master&service=github)](https://coveralls.io/github/fleg/mongo-each?branch=master)
-[![NPM Version][npm-image]][npm-url]
+[![NPM Version](https://img.shields.io/npm/v/mongo-each.svg)](https://www.npmjs.com/package/mongo-each)
 
-Queued asynchronous iterating over mongodb cursor
+Queued asynchronous iterating over mongodb cursor without duplicates
 
 ## API
 
@@ -43,17 +43,6 @@ MongoClient.connect('mongodb://127.0.0.1:27017/data', function(err, db) {
 });
 ```
 
-## Tests
-Run:
-```sh
-npm test
-```
-
-Pass mongodb connection string through `MONGODB_URI` variable or use default value `mongodb://127.0.0.1:27017/each_test`
-
 ## License
 
 MIT
-
-[npm-image]: https://img.shields.io/npm/v/mongo-each.svg
-[npm-url]: https://www.npmjs.com/package/mongo-each
