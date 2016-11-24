@@ -5,3 +5,5 @@ test
 .npmignore
 *.tgz
 *.log
+.nycrc
+.nyc_output

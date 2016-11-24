@@ -3,7 +3,7 @@
 var expect = require('expect.js'),
 	MongoClient = require('mongodb').MongoClient,
 	Steppy = require('twostep').Steppy,
-	each = require('../lib/mongo-each.js');
+	each = require('../');
 
 describe('mongo-each test', function() {
 	var db, collection,
