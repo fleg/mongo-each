@@ -20,7 +20,7 @@
     "async"
   ],
   "dependencies": {
-    "async": "0.9.0"
+    "fastq": "1.4.1"
   },
   "devDependencies": {
     "coveralls": "2.11.4",

@@ -37,6 +37,9 @@ describe('mongo-each test', function() {
 		);
 	});
 
+	var timeout = function(callback) {
+		setTimeout(callback, 1);
+	};
 
 	it('iterate over each document', function(done) {
 		var count = 0;
@@ -44,7 +47,7 @@ describe('mongo-each test', function() {
 		each(collection.find(), function(doc, callback) {
 			expect(doc).to.be.ok();
 			++count;
-			callback();
+			timeout(callback);
 		}, {
 			concurrency: 50,
 			batch: false
@@ -60,7 +63,7 @@ describe('mongo-each test', function() {
 		each(collection.find(), function(doc, callback) {
 			expect(doc).to.be.ok();
 			++count;
-			callback();
+			timeout(callback);
 		}, function(err) {
 			expect(count).to.be.eql(expectedCount);
 			done(err);
@@ -87,7 +90,7 @@ describe('mongo-each test', function() {
 			expect(docs).to.be.an('array');
 			expect(docs.length).to.be.eql(batchSize);
 			count += docs.length;
-			callback();
+			timeout(callback);
 		}, {
 			concurrency: 1000,
 			batch: true,
@@ -107,7 +110,7 @@ describe('mongo-each test', function() {
 			expect(docs.length).to.be.above(0);
 			expect(docs.length).to.be.below(batchSize + 1);
 			count += docs.length;
-			callback();
+			timeout(callback);
 		}, {
 			concurrency: 1000,
 			batch: true,
@@ -132,7 +135,7 @@ describe('mongo-each test', function() {
 				first = false;
 				collection.updateOne({_id: doc._id}, {$set: {data: 5000}}, callback);
 			} else {
-				callback();
+				timeout(callback);
 			}
 		}, {
 			concurrency: 10,
