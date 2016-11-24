@@ -7,3 +7,6 @@ test
 *.log
 .nycrc
 .nyc_output
+.eslintignore
+.eslintrc.json
+.eslintcache

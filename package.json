@@ -11,7 +11,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test --bail --reporter spec --timeout 10000",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc npm run test",
+    "lint": "eslint --cache ./"
   },
   "keywords": [
     "mongo",
@@ -24,6 +25,8 @@
   },
   "devDependencies": {
     "coveralls": "2.11.4",
+    "eslint": "3.5.0",
+    "eslint-config-dvpnt": "1.2.0",
     "expect.js": "0.3.1",
     "mocha": "3.1.2",
     "mongodb": "2.1.4",
