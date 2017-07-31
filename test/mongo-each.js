@@ -79,6 +79,24 @@ describe('mongo-each test', function() {
 		});
 	});
 
+	it('pass error from stream to main callback', function(done) {
+		var cursor = collection.find(),
+			stream = cursor.stream();
+
+		cursor.stream = function() {
+			return stream;
+		};
+
+		each(cursor, function(doc, callback) {
+			callback();
+		}, function(err) {
+			expect(err.message).to.be.eql('foobar');
+			done();
+		});
+
+		stream.emit('error', new Error('foobar'));
+	});
+
 	it('call main callback just once', function(done) {
 		var called = false;
 
