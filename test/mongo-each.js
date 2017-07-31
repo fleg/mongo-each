@@ -71,12 +71,25 @@ describe('mongo-each test', function() {
 	});
 
 	it('pass error from iterator to main callback', function(done) {
-		var error = 'i am an error';
+		each(collection.find(), function(doc, callback) {
+			callback(new Error('foobar'));
+		}, function(err) {
+			expect(err.message).to.be.eql('foobar');
+			done();
+		});
+	});
+
+	it('call main callback just once', function(done) {
+		var called = false;
 
 		each(collection.find(), function(doc, callback) {
-			callback(error);
-		}, function(err) {
-			expect(err).to.be.eql(error);
+			callback(new Error('foobar'));
+		}, function() {
+			if (called) {
+				return done(new Error('called more than once'));
+			}
+
+			called = true;
 			done();
 		});
 	});
