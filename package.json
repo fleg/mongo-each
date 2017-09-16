@@ -21,16 +21,16 @@
     "async"
   ],
   "dependencies": {
-    "fastq": "1.4.1"
+    "fastq": "1.5.0"
   },
   "devDependencies": {
-    "coveralls": "2.11.4",
+    "coveralls": "2.13.1",
     "eslint": "3.5.0",
     "eslint-config-dvpnt": "1.2.0",
     "expect.js": "0.3.1",
-    "mocha": "3.1.2",
-    "mongodb": "2.1.4",
-    "nyc": "10.0.0",
+    "mocha": "3.5.3",
+    "mongodb": "2.2.31",
+    "nyc": "11.2.1",
     "twostep": "0.4.2"
   }
 }
