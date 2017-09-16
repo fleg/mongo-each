@@ -14,6 +14,7 @@ Queued asynchronous iterating over mongodb cursor without duplicates
 	* `concurrency` - how many `iterator` functions should be run in parallel (default: `100`)
 	* `batch` - batch mode (default: `false`)
 	* `batchSize` - batch size (default: `10`)
+	* `snapshot` - enable or disable cursor snapshot (default: `true`)
 * `callback` - `function(err)` callback which is called when all iterator functions have finished, or an error occurs
 
 
