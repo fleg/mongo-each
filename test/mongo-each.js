@@ -176,4 +176,19 @@ describe('mongo-each test', function() {
 			done(err);
 		});
 	});
+
+	[true, false].forEach(function(value) {
+		it('with snapshot = ' + value, function(done) {
+			var cursor = collection.find({}, {limit: 1});
+
+			each(cursor, function(doc, callback) {
+				timeout(callback);
+			}, {
+				snapshot: value
+			}, function(err) {
+				expect(cursor.s.cmd.snapshot).to.be.eql(value);
+				done(err);
+			});
+		});
+	});
 });
