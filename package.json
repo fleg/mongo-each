@@ -10,8 +10,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha test --bail --reporter spec --timeout 10000",
-    "coverage": "nyc npm run test",
+    "test": "tap test.js  --bail",
+    "coverage": "tap test.js  --bail --coverage --coverage-report=text --100",
     "lint": "eslint --cache ./"
   },
   "keywords": [
@@ -21,16 +21,12 @@
     "async"
   ],
   "dependencies": {
-    "fastq": "1.5.0"
+    "fastq": "1.6.0"
   },
   "devDependencies": {
-    "coveralls": "2.13.1",
-    "eslint": "3.5.0",
-    "eslint-config-dvpnt": "1.2.0",
-    "expect.js": "0.3.1",
-    "mocha": "3.5.3",
+    "eslint": "5.7.0",
+    "eslint-config-dvpnt": "3.1.0",
     "mongodb": "2.2.31",
-    "nyc": "11.2.1",
-    "twostep": "0.4.2"
+    "tap": "12.6.1"
   }
 }
