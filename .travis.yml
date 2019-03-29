@@ -21,7 +21,4 @@ before_script:
 
 script:
   - npm run lint
-  - npm run coverage
-
-after_script:
-  - cat ./coverage/lcov.info | coveralls
+  - npm run coverage  -- --coverage-report=text-lcov --reporter=classic --color
