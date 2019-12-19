@@ -49,7 +49,7 @@ module.exports = (cursor, iteratee, {
 	});
 
 	stream.on('end', () => {
-		if (batch) {
+		if (batch && docs.length > 0) {
 			queue.push(docs, done);
 		}
 

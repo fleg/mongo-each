@@ -15,6 +15,22 @@ t.test('mongo-each', async (t) => {
 
 	await db.dropDatabase();
 
+	await t.test('iterate over empty collection', async (t) => {
+		await each(collection.find(), () => {
+			t.fail('should not call');
+		});
+
+		t.pass();
+	});
+
+	await t.test('iterate over empty collection in batch mode', async (t) => {
+		await each(collection.find(), () => {
+			t.fail('should not call');
+		}, {batch: true});
+
+		t.pass();
+	});
+
 	await collection.insertMany(Array(collectionSize).fill().map((v, i) => ({
 		data: i + 1
 	})));
