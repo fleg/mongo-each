@@ -9,7 +9,8 @@ function delay(ms) {
 }
 
 t.test('mongo-each', async (t) => {
-	const db = await MongoClient.connect('mongodb://127.0.0.1:27017/mongo_each_test');
+	const client = await MongoClient.connect('mongodb://127.0.0.1:27017/mongo_each_test');
+	const db = client.db();
 	const collection = db.collection('test');
 	const collectionSize = 1000;
 
@@ -102,5 +103,5 @@ t.test('mongo-each', async (t) => {
 		t.is(count, collectionSize);
 	});
 
-	await db.close(true);
+	await client.close();
 });
