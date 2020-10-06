@@ -1,15 +1,15 @@
 language: node_js
 
 node_js:
-  - 8
-  - 10
+  - 12
+  - 14
   - stable
 
 sudo: false
 
 env:
-  - MONGODB_VERSION=4.0.7
-  - MONGODB_VERSION=3.6.11
+  - MONGODB_VERSION=4.0.20
+  - MONGODB_VERSION=4.2.10
 
 before_script:
   - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB_VERSION}.tgz -O /tmp/mongodb.tgz
