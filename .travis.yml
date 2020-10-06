@@ -16,7 +16,6 @@ cache:
     - /tmp/dl
 
 before_script:
-  - mkdir /tmp/dl
   - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB_VERSION}.tgz -O /tmp/dl/mongodb-${MONGODB_VERSION}.tgz
   - tar -xvf /tmp/dl/mongodb-${MONGODB_VERSION}.tgz
   - mkdir /tmp/data
